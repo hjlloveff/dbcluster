@@ -1,0 +1,12 @@
+version: '2.1'
+services:
+  solr:
+        image: solr:5.5
+        container_name: solr
+        network_mode: "host"
+        ports:
+          - "8983:8983"
+        environment:
+          TZ: Asia/Taipei
+        command: /opt/solr/bin/solr start -f -z 192.168.186.3:2181,192.168.186.4:2181,192.168.186.5:2181
+        restart: always

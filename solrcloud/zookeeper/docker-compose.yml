@@ -1,0 +1,14 @@
+version: '2.1'
+services:
+    zoo2:
+        image: docker.io/garland/zookeeper
+        container_name: zoo2
+        network_mode: "host"
+        restart: always
+        ports:
+            - "2181:2181"
+        environment:
+            SERVER_ID: 1
+        volumes:
+            - "./zoo/data/:/tmp/zookeeper/"
+            - "./zoo/conf/:/opt/zookeeper/conf/"
