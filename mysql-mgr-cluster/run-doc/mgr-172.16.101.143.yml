@@ -1,0 +1,31 @@
+ version: '2.1'
+ services:
+   mysql:
+     image: docker-reg.emotibot.com.cn:55688/mgpmysql:5.7.22
+     environment:
+       - GROUP_SEEDS1=172.16.101.143:33060  # 第一台主机
+       - GROUP_SEEDS2=172.16.101.100:33070  # 第二台主机
+       - GROUP_SEEDS3=172.16.101.50:33080   # 第三台主机
+       - DOCKERNET=172.17.0.0/16,172.16.101.0/24    # 容器网路与物理ip网络
+       - MGR_FIRST=yes  #  该容器为集群第一台
+       - SERVER_ID=1    # id 号
+       - GROUP_LOCAL_IP_PORT=33060  # 组复制通讯端口
+#       - MYSQL_RANDOM_ROOT_PASSWORD=该项可删除，代表使用随机root密码
+       - MYSQL_ROOT_PASSWORD=aabb123!     # root 密码
+       - MYSQL_LOG_CONSOLE=true     # 在console输出日志
+#       - MYSQL_ALLOW_EMPTY_PASSWORD=该项可删除，代表允许空密码登录
+#       - MYSQL_ONETIME_PASSWORD=该项可删除，代表密码马上过期，需要重新修改root密码
+       - MYSQL_ROOT_HOST=%    #  root用户的登录主机地址，%代表所有
+     extra_hosts:
+      - mysqlmgr1:172.16.101.143
+      - mysqlmgr2:172.16.101.100
+      - mysqlmgr3:172.16.101.50
+     volumes:
+      - /home/deployer/dcmysql/33061:/var/lib/mysql:rw
+     ports:
+      - 3306:3306
+      - 33060:33060
+     network_mode: "bridge"
+     container_name: mysqlmgr1 
+     hostname: mysqlmgr1   # 需要与hoss对应
+

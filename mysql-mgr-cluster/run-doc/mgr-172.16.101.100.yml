@@ -1,0 +1,28 @@
+ version: '2.1'
+ services:
+   mysql:
+     image: docker-reg.emotibot.com.cn:55688/mgpmysql:5.7.22
+     environment:
+       - GROUP_SEEDS1=172.16.101.143:33060
+       - GROUP_SEEDS2=172.16.101.100:33070
+       - GROUP_SEEDS3=172.16.101.50:33080
+       - DOCKERNET=172.17.0.0/16,172.16.101.0/24
+       - MGR_FIRST=no
+       - SERVER_ID=2
+       - GROUP_LOCAL_IP_PORT=33070
+       - MYSQL_ROOT_PASSWORD=aabb123!
+       - MYSQL_LOG_CONSOLE=true
+       - MYSQL_ROOT_HOST=%
+     extra_hosts:
+      - mysqlmgr1:172.16.101.143
+      - mysqlmgr2:172.16.101.100
+      - mysqlmgr3:172.16.101.50
+     volumes:
+      - /home/deployer/dcmysql/33071:/var/lib/mysql:rw
+     ports:
+      - 3306:3306
+      - 33070:33070
+     network_mode: "bridge"
+     container_name: mysqlmgr2  
+     hostname: mysqlmgr2
+

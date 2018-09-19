@@ -1,0 +1,31 @@
+ version: '2.1'
+ services:
+   mysql:
+     image: docker-reg.emotibot.com.cn:55688/mgpmysql:5.7.22
+     environment:
+       - GROUP_SEEDS1=[第一个节点ip:port,"172.16.101.143:33060"]
+       - GROUP_SEEDS2=[第二个节点ip:port,"172.16.101.100:33070"]
+       - GROUP_SEEDS3=[第三个节点ip:port,"172.16.101.50:33080"]
+       - DOCKERNET=[docker的网络,本地物理机网络,格式 "172.17.0.0/16,172.16.101.0/24"]
+       - MGR_FIRST=[是否是集群第一个启动的,格式 "yes|no"]
+       - SERVER_ID=[数字，各个不相同即可]
+       - GROUP_LOCAL_IP_PORT=33060
+       - MYSQL_RANDOM_ROOT_PASSWORD=[留空，不实用随机密码]
+       - MYSQL_ROOT_PASSWORD=[mysql中root用户的密码]
+       - MYSQL_LOG_CONSOLE=true
+       - MYSQL_ALLOW_EMPTY_PASSWORD=
+       - MYSQL_ONETIME_PASSWORD=
+       - MYSQL_ROOT_HOST=[%]
+     extra_hosts:
+      - mysqlmgr1:[机宿主机物理ip]
+      - mysqlmgr2:[宿主机物理ip]
+      - mysqlmgr3:[宿主机物理ip]
+     volumes:
+      - [宿主机路径]:/var/lib/mysql:rw
+     ports:
+      - 3306:3306
+      - 33060:33060
+     network_mode: "bridge"
+     container_name: mysqlmgr1   #需要与hosts对应
+     hostname: mysqlmgr1
+
